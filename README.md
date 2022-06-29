@@ -123,7 +123,7 @@ Ultimately, the Logistic Regression and XGBoost models performed best on recall.
 ## Conclusions & Next Steps
 
 * Our logistic regression model was able to predict recidivism with a recall score of 0.62
-* The model identified that a person's Supervising District, Race - Ethnicity, Age and Type of Release were the most predictive features for whether or not they are likely to return to prison
+* The model identified that a person's Supervising District, Race - Ethnicity, Offense Subtype and Type of Release were the most predictive features for whether or not they are likely to return to prison
   * **Supervising Districts.** Persons released to Judicial Supervising districts showed higher rates of recidivism than those released without supervision.
   * **Race - Ethnicity.** Non-Hispanic American Indian, Alaska Natives and White persons showed higher rates of recidivism relative to other  races/ethnicities.
   * **Offense Subtype.** Persons comitting "other criminal" crimes had a higher than average likelihood of reoffending.
@@ -132,7 +132,7 @@ Ultimately, the Logistic Regression and XGBoost models performed best on recall.
 
 ### For more information
 
-See the full analysis in the Jupyter Notebook or review this presentation.
+See the full analysis in the [Jupyter Notebook](https://github.com/robertharrow/modeling-recidivism/blob/main/recidivism-modeling.ipynb) or review this presentation.
 
 For additional info, contact Robert Harrow at rharrow928@gmail.com.
 
