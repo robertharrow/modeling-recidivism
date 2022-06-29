@@ -1,23 +1,34 @@
 # Modeling Recidivism in Iowa
 
-Phase 3 Project: Robert Harrow
+Flatiron School Phase 3 Data Science Project
+Author: Robert Harrow
 
-## Overivew
+## Overview
 
 <figure>
 <img src="images/header-image.jpg" alt="Prison" style="width:100%">
 <figcaption align = "center"><b>Photo by Larry Farr on Unsplash</b></figcaption>
 </figure>
+<br>
 
-The stakeholder for this analysis is the Iowa Department of Corrections (IDC). The IDC wants to understand whether recidivism among its prison population can be predicted, and if so, what factors serve as the strongest predictors.
+The stakeholder for this analysis is the Iowa Department of Corrections (IDC). The IDC wants to better understand factors that may lead to recidivism and to have a model that can help predict whether a person is at risk of reoffending.
 
-The IDC wants to use this information to improve its rehabilitation programs and to understand whether current measures are disproportionately ineffective in helping certain groups.
+## Business Understanding
+
+The Department of Corrections uses recidivism as an indicator on whether strategies are reducing offenders relapse into criminal behavior. It wants to use analysis to pin-point whether current strategies are failing certain populations or groups at disproportionate rates so it can better study what is or isn't working.
 
 ## Data & Methodology
 
 To study recidivism, the IDC maintains a database of prisoner recidivism. The file contains 17 features, and over 26,000 records - each pertaining to a given prisoner between 2010 and 2015.
 
-A TARGET column was created using the 'Return to Prison' columnm, which indicates whether the prisoner returned to prison within 3 years of release. Below is a dictionary explaining the data.
+The TARGET column was 'Return to Prison', which indicates whether the prisoner returned to prison within 3 years of release. Below is a dictionary explaining the data.
+
+Here is how the data is distributed
+
+| Class = 'Return to Prison' | Occurrences | % of Total |
+|----------------------------|-------------|------------|
+| Yes (1)                    | 8681        | 35%        |
+| No (0)                     | 17339       | 65%        |
 
 From the IDC:
 
@@ -50,11 +61,13 @@ The Department of Corrections uses recidivism as an indicator on whether strateg
 
 ## Results
 
-We found that Supervising Districts, Race and Age to be important features in our models.
+We found that Supervising Districts, Race and Offense Subtype to be important features in our models.
 
-### Exploring Surpervising Districts
+### Exploring Supervising Districts
 
 Persons released from prison are either released to one of 8 Supervising Districts, discharged completely or discharged out-of-state (to ISC).
+
+If a person was released to Iowa Judicial District 5, this was the second strongest predictor in our model for whether they are more likely to end up back in prison. Many of the other districts were also among the top 10 predictors overall for our model. Quite a stark contrast to the population that is released to no supervising district.
 
 NOTE: While rates look low for persons released to ISC (Interstate Compact) that is potentially misleading. These persons leave Iowa state, and if they return to a prison not located in Iowa, the IDC does not receive data on that.
 
@@ -62,15 +75,19 @@ NOTE: While rates look low for persons released to ISC (Interstate Compact) that
 
 ### Race & Ethnicity
 
-Another strong predictor in the model was race & ethnicity. The results are shown below.
+Another strong predictor in the model was whether the person was a Non-Hispanic American Indian or Alaska Native. The IDC should investigate why its current strategies are failing to help this group.
+
+The results for this and other races and ethnicities are shown below.
 
 ![Race - Ethnicity](images/race-ethnicity.png)
 
-### Age at Release
+### Offense Subtype
 
-The IDC notes the age of persons at the time they are released from prison. Persons between 25-34 and those below 25 showed higher than average rates of recidivism.
+Persons in prison for certain offense subtypes showed a greater likelihood of having above-average recidivism rates.
 
-![Age at Release](images/age.png)
+* Persons with the 'Other Criminal' classification had the highest rate, and were the third strongest predictor in our model
+* This was followed by those who committed Burglary and Alcohol-related crimes.
+![Offense Subtype](images/offense-subtype.png)
 
 ### Release Type
 
@@ -83,19 +100,19 @@ Special Sentences apply to Class "B" and Class "C" felonies and a definition can
 
 ## Models
 
-The models in this project were maximizing for macro recall, because the business case centers around trying to predict a specific class and we were willing to tolerate some degree of false positives.
+The models in this project were maximized for macro recall, because the business case centers around trying to predict a specific class and we were willing to tolerate some degree of false positives.
 
 | Model               | Accuracy | Precision | Recall | F1   |
 |---------------------|----------|-----------|--------|------|
 | Dummy               | 0.66     | 0.33      | 0.5    | 0.40 |
-| Decision Tree       | 0.58     | 0.60      | 0.61   | 0.58 |
-| Random Forest       | 0.58     | 0.60      | 0.61   | 0.57 |
-| XGBoost             | 0.62     | 0.60      | 0.61   | 0.60 |
-| Logistic Regression | 0.60     | 0.60      | 0.62   | 0.60 |
+| Decision Tree       | 0.59     | 0.59      | 0.60   | 0.58 |
+| Random Forest       | 0.57     | 0.59      | 0.60   | 0.57 |
+| XGBoost             | 0.62     | 0.61      | 0.62   | 0.60 |
+| Logistic Regression | 0.60     | 0.61      | 0.62   | 0.60 |
 
 ### Final Model
 
-Ultimately, the Logistic Regression model performed best on recall. Recall was important because we wanted to maximize our ability to predict a specific class (persons returning to prison) for the business case. We were willing to tolerate some level of false positives. That's why we also paid attention to Precision/F1 scores. Luckily, the best performing LogisticRegression model also scored best on those metrics.
+Ultimately, the Logistic Regression and XGBoost models performed best on recall. Recall was important because we wanted to maximize our ability to predict a specific class (persons returning to prison) for the business case. We were willing to tolerate some level of false positives. That's why we also paid attention to Precision/F1 scores. Ultimately, we go with LogisticRegression because it had a slightly lower instance of misclassifying 1's as 0's than the XGBoost model (32% vs 33% respectively)
 
 | Model              | Penalty | Class Weight | Transformation/Encoding |
 |--------------------|---------|--------------|-------------------------|
@@ -108,21 +125,22 @@ Ultimately, the Logistic Regression model performed best on recall. Recall was i
 * Our logistic regression model was able to predict recidivism with a recall score of 0.62
 * The model identified that a person's Supervising District, Race - Ethnicity, Age and Type of Release were the most predictive features for whether or not they are likely to return to prison
   * **Supervising Districts.** Persons released to Judicial Supervising districts showed higher rates of recidivism than those released without supervision.
-  * **Race - Ethnicity.** Non-Hispanic American Indian, Alaska Natives and White persons showed higher rates of recidivism relative to other races/thnicities.
-  * **Age at Release.** Persons below the age of 34 had above-average rates of recidivism.
+  * **Race - Ethnicity.** Non-Hispanic American Indian, Alaska Natives and White persons showed higher rates of recidivism relative to other  races/ethnicities.
+  * **Offense Subtype.** Persons comitting "other criminal" crimes had a higher than average likelihood of reoffending.
   * **Release Type.** Individuals released on a special sentence had far higher average recidivism rates than those released on parole or those discharged without parole.
 * The Iowa Department of Corrections should investigate why its programs are disproportionately not effective in helping these persons.
 
-### Formore information
+### For more information
 
 See the full analysis in the Jupyter Notebook or review this presentation.
 
 For additional info, contact Robert Harrow at rharrow928@gmail.com.
 
 ### Repository Structure
-
+```
 ├── data
 ├── images
 ├── README.md
 ├── presentation.pdf
 └── recidivism-modeling.ipynb
+```
