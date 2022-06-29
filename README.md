@@ -132,7 +132,7 @@ Ultimately, the Logistic Regression and XGBoost models performed best on recall.
 
 ### For more information
 
-See the full analysis in the [Jupyter Notebook](https://github.com/robertharrow/modeling-recidivism/blob/main/recidivism-modeling.ipynb) or review this presentation.
+See the full analysis in the [Jupyter Notebook](https://github.com/robertharrow/modeling-recidivism/blob/main/recidivism-modeling.ipynb) or review this [presentation](https://github.com/robertharrow/modeling-recidivism/blob/main/presentation.pdf).
 
 For additional info, contact Robert Harrow at rharrow928@gmail.com.
 
